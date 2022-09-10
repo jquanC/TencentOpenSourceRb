@@ -1,0 +1,2 @@
+JMH S 16 ECDSA.TestDigSig S 43 ECDSA.jmh_generated.TestDigSig_sign_jmhTest S 4 sign S 11 AverageTime I 1 5 A 1 1 1 E I 1 5 E E I 1 5 E E I 1 1 E E E E E M 1 11 contentSize 4 8 3AA===== 8 4AA===== 8 xAAMAA== 8 yAAMAA== U 11 NANOSECONDS E E 
+JMH S 16 ECDSA.TestDigSig S 45 ECDSA.jmh_generated.TestDigSig_verify_jmhTest S 6 verify S 11 AverageTime I 1 5 A 1 1 1 E I 1 5 E E I 1 5 E E I 1 1 E E E E E M 1 11 contentSize 4 8 3AA===== 8 4AA===== 8 xAAMAA== 8 yAAMAA== U 11 NANOSECONDS E E 

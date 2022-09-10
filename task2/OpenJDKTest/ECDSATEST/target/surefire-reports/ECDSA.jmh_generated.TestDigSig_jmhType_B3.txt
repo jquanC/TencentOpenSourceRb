@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ECDSA.jmh_generated.TestDigSig_jmhType_B3
+-------------------------------------------------------------------------------
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
