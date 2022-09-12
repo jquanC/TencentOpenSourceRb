@@ -130,7 +130,7 @@ Briefly, here are the several scalar multiplications we implemented and their ps
 
 ![image-20220910174600154](task3_report.assets/image-20220910174600154.png)
 
-The instructions on the wiki are relatively brief, and further instructions (specific implementation) as follows:
+The instructions on the wiki are relatively brief, and further instructions (specific implementation) as follows[12]:
 
  $w:the\ window\ size$ 
 
@@ -142,12 +142,21 @@ We denote k in base $2^w$ as: $k = (k_{n'-1},...,k_2,k_1,k_0)_{2^w}$
 
 The algorithm works as follows：
 
+$kP = \sum_{i=0}^{n'-1}k_i(2^{wi}P)=\sum_{j=1}^{2^w-1}(j\sum_{i:k_i=j}2^{wi}P)$
 
-$ kP = \sum_{i=0}^{n'-1}k_i(2^{wi}P)=\sum_{j=1}^{2^w-1}(j\sum_{i:k_i=j}2^{wi}P)$
 Let:
-$ Q_j=\sum_{i:k_i=j}2^{wi}P$
+
+$Q_j=\sum_{i:k_i=j}2^{wi}P$
+
+
+
 We have:
+
+
+
 $kP = \sum_{j=1}^{2^w-1}(jQ_j)=Q_{2^w-1}+(Q_{2^w-1}+Q_{2^w-2})+((Q_{2^w-1}+Q_{2^w-2}+...+Q_1))$
+
+
 
 During the benchmark, we tested the windowing method with and without precomputed overhead for more clarity to its performance.
 
@@ -263,6 +272,10 @@ Test result data for different methods:
 10 [sm2国密算法](http://123.57.9.108/2022/03/15/SM2%E5%9B%BD%E5%AF%86%E7%AE%97%E6%B3%95/)
 
 11 [国密标准](http://c.gb688.cn/bzgk/gb/showGb?type=online&hcno=66A89DD6DA64F49C49456B757BA0624F)
+
+12 兰修文. ECC计算算法的优化及其在SM2实现中的运用[D].电子科技大学,2019.
+
+
 
 
 
