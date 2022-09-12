@@ -7,16 +7,15 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import uti.PreComInfo;
-import uti.SM2Util;
-import uti.SelfMultiply;
+import util.PreComInfo;
+import util.SM2Util;
+import util.SelfMultiply;
 
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 

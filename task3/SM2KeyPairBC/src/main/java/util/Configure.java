@@ -1,4 +1,4 @@
-package uti;
+package util;
 
 import java.math.BigInteger;
 

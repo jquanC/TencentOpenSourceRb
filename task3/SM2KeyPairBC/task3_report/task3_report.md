@@ -41,7 +41,9 @@ $y^2 = x^3+ax+b$
 
 ![image-20220910162825110](task3_report.assets/image-20220910162825110.png)
 
-<center> [Wolfram MathWorld](http://mathworld.wolfram.com/EllipticCurve.html)</center>
+[Wolfram MathWorld](http://mathworld.wolfram.com/EllipticCurve.html)
+
+
 
 
 
@@ -53,7 +55,9 @@ $E(F_p)={(x,y):x,y\in F_p\ satisfy\ y^2 = x^3+ax+b}\bigcup \{O\}$
 
 ![image-20220910163401060](task3_report.assets/image-20220910163401060.png)
 
-<center> [ZhiHu: Finite Fields and Discrete Logarithms](https://zhuanlan.zhihu.com/p/44743146)</center>
+[ZhiHu: Finite Fields and Discrete Logarithms](https://zhuanlan.zhihu.com/p/44743146)
+
+
 
 
 
@@ -63,6 +67,8 @@ It can be seen that after the elliptic curve is defined on the finite field, **t
 The $F_p-256$ means the curve defined in the finite field and Its finite field size is a prime number of length 256 bits.
 
 Define the number of points an elliptic curve has on a finite field is **the order of the group of elliptic curves**. Schoof's algorithm can quickly find the order of elliptic curve groups over finite fields.
+
+
 
 
 
@@ -84,6 +90,8 @@ A conclusion in group theory is that the order of a subgroup must be a factor of
 
 
 
+
+
 ### **Elliptic_curve_point_multiplication**
 
 We call elliptic curve point multiplication as scalar multiplication in the follows.
@@ -94,13 +102,13 @@ Given a certain base point P, private key n, public key $Q=nP$
 
 This repository implements several elliptic curve scalar multiplications from this [wiki](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication) :
 
-The scalar multiplication method code implemented in util/SelfMultiply: xxxxxxxxxx
+The scalar multiplication method code implemented in [~/task3/SM2KeyPairBC/src/main/java/util/SelfMultiply.java](https://github.com/jquanC/TencentOpenSourceRb/blob/main/task3/SM2KeyPairBC/src/main/java/uti/SelfMultiply.java)
 
-The  correctness of above algorithm can be checked in the package CorrectnessTest: xxxx
+The  correctness of above algorithm can be checked in the package [~task3/SM2KeyPairBC/src/main/java/CorrectnessTest](https://github.com/jquanC/TencentOpenSourceRb/tree/main/task3/SM2KeyPairBC/src/main/java/CorrectnessTest)
 
 
 
-Briefly, here are several scalar multiplications we implemented and their pseudocodes:
+Briefly, here are the several scalar multiplications we implemented and their pseudocodes:
 
 1. Iterative algorithm: lsb to msb
 
@@ -133,17 +141,15 @@ Firstly, calculate $2^w$ values of $dP$ in advance for $d = 0,1,2,...,2^w-1$
 We denote k in base $2^w$ as: $k = (k_{n'-1},...,k_2,k_1,k_0)_{2^w}$
 
 The algorithm works as follows：
-$$
-\begin{align}
-& kP = \sum_{i=0}^{n'-1}k_i(2^{wi}P)=\sum_{j=1}^{2^w-1}(j\sum_{i:k_i=j}2^{wi}P)\\
-& Let:\\
-&\ \ \ \ \ \ \ \  \ \ \ Q_j=\sum_{i:k_i=j}2^{wi}P\\
-& We\ have:\\
-&kP = \sum_{j=1}^{2^w-1}(jQ_j)=Q_{2^w-1}+(Q_{2^w-1}+Q_{2^w-2})+((Q_{2^w-1}+Q_{2^w-2}+...+Q_1))
 
-\end{align}
-$$
-During the benchmark, We tested the windowing method with and without precomputed overhead for more clarity.
+
+$ kP = \sum_{i=0}^{n'-1}k_i(2^{wi}P)=\sum_{j=1}^{2^w-1}(j\sum_{i:k_i=j}2^{wi}P)$
+Let:
+$ Q_j=\sum_{i:k_i=j}2^{wi}P$
+We have:
+$kP = \sum_{j=1}^{2^w-1}(jQ_j)=Q_{2^w-1}+(Q_{2^w-1}+Q_{2^w-2})+((Q_{2^w-1}+Q_{2^w-2}+...+Q_1))$
+
+During the benchmark, we tested the windowing method with and without precomputed overhead for more clarity to its performance.
 
 
 
@@ -151,7 +157,7 @@ During the benchmark, We tested the windowing method with and without precompute
 
 ### Security 
 
-The security is based the Elliptic Curve Discrete Logarithmic Problem. This is because adding points on two elliptic curves will result in another point on the curve. **Intuitively, Its position is not directly related to the first two points. When n is large, the final point Q appears to appear anywhere.**
+The security is based the Elliptic Curve Discrete Logarithmic Problem. This is because adding points on two elliptic curves will result in another point on the curve. **Intuitively, Its position is not directly related to the first two points. When n is large, the final point Q seems to appear anywhere.**
 
 When the attacker has Q and P and wants to calculate the private key n, he can basically only try all possible n to complete. This is computationally infeasible.
 
@@ -177,9 +183,9 @@ The curve parameters are as follows:
 
 ````text
 Sm2C1:Fp-256
-p：8542D69E 4C044F18	E8B92435	BF6FF7DE	45728391	5C45517D	722EDB8B	08F1DFC3
-a：787968B4 FA32C3FD 2417842E	73BBFEFF	2F3C848B	6831D7E0	EC65228B	3937E498
-b：63E4C6D3 B23B0C84 9CF84241	484BFE48	F61D59A5	B16BA06E	6E12D1DA	27C5249A
+p：8542D69E 4C044F18	E8B92435 BF6FF7DE 45728391 5C45517D 722EDB8B 08F1DFC3
+a：787968B4 FA32C3FD 2417842E 73BBFEFF 2F3C848B 6831D7E0	EC65228B 3937E498
+b：63E4C6D3 B23B0C84 9CF84241 484BFE48 F61D59A5 B16BA06E	6E12D1DA 27C5249A
 h：1
 G＝(xG，yc)
 xG：421DEBD6 1B62EAB6 746434EB C3CC315E 32220B3B ADD50BDC 4C4E6C14 7FEDD43D
@@ -246,7 +252,7 @@ Test result data for different methods:
 
 5 [Elliptic Curve Cryptography ](http://aandds.com/blog/ecc.html)
 
-6 [**SM2椭圆曲线公钥密码算法推荐曲线参数**](https://www.oscca.gov.cn/sca/xxgk/2010-12/17/1002386/files/b965ce832cc34bc191cb1cde446b860d.pdf)
+6 [SM2椭圆曲线公钥密码算法推荐曲线参数](https://www.oscca.gov.cn/sca/xxgk/2010-12/17/1002386/files/b965ce832cc34bc191cb1cde446b860d.pdf)
 
 7 [SM2国密算法/椭圆曲线密码学ECC之数学原理](https://www.jianshu.com/p/5b04b66a55a1)
 

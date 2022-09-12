@@ -1,13 +1,11 @@
-package uti;
+package util;
 
 import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECPoint;
 import sm2.SM2KeyPair;
 
 import java.math.BigInteger;
-import java.security.PrivateKey;
 import java.security.SecureRandom;
-import java.util.Random;
 
 
 public class SM2Util {

@@ -39,11 +39,12 @@ import java.util.concurrent.TimeUnit;
 
 public class TestDigSig {
     public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, SignatureException, InvalidKeyException, InvalidKeySpecException, RunnerException {
-      /*  TestDigSig digSigTool = new TestDigSig();
+   /*     TestDigSig digSigTool = new TestDigSig();
         digSigTool.setUp();
         digSigTool.sign();
-        boolean result = digSigTool.verify();
-        System.out.println("result should be true: "+result);*/
+        digSigTool.verify();
+//        boolean result =  digSigTool.verify();
+//        System.out.println("result should be true: "+result);*/
         Options opt = new OptionsBuilder()
                 .include(TestDigSig.class.getSimpleName())
                 .result("result.json")
@@ -52,7 +53,8 @@ public class TestDigSig {
 
     }
 
-    public  final String SPEC = "secp256r1"; //ECC使用的曲线
+//    public  final String SPEC = "secp256r1"; //ECC使用的曲线
+    public  final String SPEC = "secp256k1"; //ECC使用的曲线
     public final String ALGO = "SHA256withECDSA"; //数字签名算法
     public  String PLAIN_TEXT = "Hello,ECDSA!";
 
@@ -60,21 +62,24 @@ public class TestDigSig {
     public  int contentSize;
 
     //need initial
-    public static byte[] SIGN_CONTENT = null;
-    public static PublicKey publicKey = null;
-    private static PrivateKey privateKey = null;
-    public static byte[] sigContent = null;
+    public  byte[] SIGN_CONTENT = null;
+    public PublicKey publicKey = null;
+    public PrivateKey privateKey = null;
+    public  byte[] sigContent = null;
 
-//    private static JSONObject obj = null;
+
 
     @Setup
     public void setUp() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Random random = new Random(7);//default 、7、17
+        Random random = new Random(7);//default 7、17
         //1024 KB
 //        SIGN_CONTENT = new byte[1<<20];
-        SIGN_CONTENT = new byte[1<<contentSize];
+        this.SIGN_CONTENT = new byte[1<<contentSize];
         random.nextBytes(SIGN_CONTENT);
-        sign();
+        sign(); // to prepare  key pair
+
+
+
     }
 
 
@@ -87,7 +92,6 @@ public class TestDigSig {
         KeyPair keyPair = keyPairGen.generateKeyPair();
         this.publicKey = keyPair.getPublic();
         this.privateKey = keyPair.getPrivate();
-
         Signature ecdsaSign = Signature.getInstance(ALGO);
         ecdsaSign.initSign(privateKey);
 //        ecdsaSign.update(PLAIN_TEXT.getBytes(StandardCharsets.UTF_8));
@@ -109,7 +113,7 @@ public class TestDigSig {
         ecdsaVerify.update(this.SIGN_CONTENT);
         boolean result = ecdsaVerify.verify(this.sigContent);
 
-//        if(result) System.out.println("digital signature verify pass");
+        if(result) System.out.println("digital signature verify pass");
         if(!result) System.out.println("digital signature verify failed");
 //        return result;
     }

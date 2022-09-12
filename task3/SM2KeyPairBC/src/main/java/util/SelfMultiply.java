@@ -1,7 +1,5 @@
-package uti;
+package util;
 
-import org.bouncycastle.jcajce.provider.asymmetric.ec.KeyFactorySpi;
-import org.bouncycastle.jcajce.provider.asymmetric.ec.KeyPairGeneratorSpi;
 import org.bouncycastle.math.ec.*;
 
 import java.math.BigInteger;

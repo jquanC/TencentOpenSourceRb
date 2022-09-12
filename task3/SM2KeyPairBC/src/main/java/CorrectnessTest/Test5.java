@@ -1,7 +1,7 @@
 package CorrectnessTest;
 
 import sm2.SM2KeyPair;
-import uti.SM2Util;
+import util.SM2Util;
 
 public class Test5 {
     public static void main(String[] args) {

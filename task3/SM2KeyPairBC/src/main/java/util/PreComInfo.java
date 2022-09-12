@@ -1,4 +1,4 @@
-package uti;
+package util;
 
 import org.bouncycastle.math.ec.ECPoint;
 
