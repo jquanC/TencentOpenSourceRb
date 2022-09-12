@@ -1,0 +1,12 @@
+dontinline,*.*_all_jmhStub
+dontinline,*.*_avgt_jmhStub
+dontinline,*.*_sample_jmhStub
+dontinline,*.*_ss_jmhStub
+dontinline,*.*_thrpt_jmhStub
+inline,JMHTest/TestMultiplyPoint.bcMult
+inline,JMHTest/TestMultiplyPoint.iteraMult
+inline,JMHTest/TestMultiplyPoint.mongMult
+inline,JMHTest/TestMultiplyPoint.recurMult
+inline,JMHTest/TestMultiplyPoint.setUp
+inline,JMHTest/TestMultiplyPoint.wndMult
+inline,JMHTest/TestMultiplyPoint.wndMultContainPreCompute
