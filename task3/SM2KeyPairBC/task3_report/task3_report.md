@@ -4,7 +4,7 @@
 
 - [2022腾讯犀牛鸟开源人才培养计划-Tencent konajdk](https://github.com/Tencent/OpenSourceTalent/issues/34)
 
-Overall, in this task, we will write test programs to test the performance of ECDSA in OPENJDK11, including using two different elliptic curves secp256r1 and secp256k1. The test tools used include JMH, Java Profiler.
+Overall, in this task, we study the generation principle of SM2 key pairs, use different algorithms to generate SM2 key pairs that meet the requirements, and test their performance.
 
 
 
@@ -242,7 +242,7 @@ Test result data for different methods:
 ### Conclusion
 
 - From the test data, the mongMult takes the longest time. This is because it does point_add and point_double when processing each bit of *n*. Doing this makes it take longer, but the benefit is that the Montgomery ladder is resistant to power attacks or timing attacks in Sideway Attack.
-- Itera_Mult and recurMult have similar time costs. This is as expected, they are  implemented in a different way but same in the theory.
+- IteraMult and recurMult have similar time costs. This is as expected, they are  implemented in a different way but same in the theory.
 
 - The time overhead of the 4bit_wnw_Mult is smaller than the bc_Mult. The possible reason is that BC has done a lot of security checks in the implementation.
 - Different curves and different private keys will bring about differences in execution speed. But this difference shows consistency across different testing algorithms.
