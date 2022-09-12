@@ -273,7 +273,7 @@ Test result data for different methods:
 
 11 [国密标准](http://c.gb688.cn/bzgk/gb/showGb?type=online&hcno=66A89DD6DA64F49C49456B757BA0624F)
 
-12 兰修文. ECC计算算法的优化及其在SM2实现中的运用[D].电子科技大学,2019.
+12 [兰修文. ECC计算算法的优化及其在SM2实现中的运用[D].电子科技大学,2019.](https://kns.cnki.net/KCMS/detail/detail.aspx?filename=1019851012.nh&dbname=CMFD202001&dbcode=CMFD&uid=WEEvREdxOWJmbC9oM1NjYkZCcDEyWVNlc0doMDhTYnlhN0paN3JoSHg4WTk=$R1yZ0H6jyaa0en3RxVUd8df-oHi7XMMDo7mtKT6mSmEvTuk11l2gFA!!&v=MzE3NjVSWWFtejExUEhia3FXQTBGckNVUjdpZmJ1ZHNGaW5oVXJ6TlZGMjZGN3U5SDlITnJaRWJQSVIrZm5zNHk=)
 
 
 
