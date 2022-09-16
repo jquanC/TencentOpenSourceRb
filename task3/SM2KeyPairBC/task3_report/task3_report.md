@@ -100,17 +100,50 @@ For a key pair generation algorithm on an elliptic curve, its essence is to perf
 
 Given a certain base point P, private key n, public key $Q=nP$
 
+
+
+### Security 
+
+The security is based the Elliptic Curve Discrete Logarithmic Problem. This is because adding points on two elliptic curves will result in another point on the curve. **Intuitively, Its position is not directly related to the first two points. When n is large, the final point Q seems to appear anywhere.**
+
+When the attacker has Q and P and wants to calculate the private key n, he can basically only try all possible n to complete. This is computationally infeasible.
+
+
+
+**About National secret algorithm**
+
+The national encryption algorithm is a domestic encryption algorithm issued and recognized by the State Cryptography Administration, which is different from the international algorithm. International algorithms generally refer to the most common commercial algorithms released by the US Security Agency today.
+
+Official standards can refer to: [link](http://c.gb688.cn/bzgk/gb/showGb?type=online&hcno=66A89DD6DA64F49C49456B757BA0624F)
+
+
+
+## Implement with BC
+
 This repository implements several elliptic curve scalar multiplications from this [wiki](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication) :
 
-The scalar multiplication method code implemented in [~/task3/SM2KeyPairBC/src/main/java/util/SelfMultiply.java](https://github.com/jquanC/TencentOpenSourceRb/blob/main/task3/SM2KeyPairBC/src/main/java/uti/SelfMultiply.java)
+The scalar multiplication method code implemented in [~/task3/SM2KeyPairBC/src/main/java/util/SelfMultiply.java](https://github.com/jquanC/TencentOpenSourceRb/blob/main/task3/SM2KeyPairBC/src/main/java/util/SelfMultiply.java)
 
-The  correctness of above algorithm can be checked in the package [~task3/SM2KeyPairBC/src/main/java/CorrectnessTest](https://github.com/jquanC/TencentOpenSourceRb/tree/main/task3/SM2KeyPairBC/src/main/java/CorrectnessTest)
+The  correctness test of above algorithm can be checked in the package [~task3/SM2KeyPairBC/src/main/java/CorrectnessTest](https://github.com/jquanC/TencentOpenSourceRb/tree/main/task3/SM2KeyPairBC/src/main/java/CorrectnessTest)
+
+The correctness test result like the following:
+
+````shell
+equation right side:15673738628471445721161132814100655470091655484731840244752417643811842010650
+equation left  side:15673738628471445721161132814100655470091655484731840244752417643811842010650
+nG equals to Infinity
+SM2 KeyPair() generated successfully
+````
 
 
 
-Briefly, here are the several scalar multiplications we implemented and their pseudocodes:
 
-1. Iterative algorithm: lsb to msb
+
+
+
+**Briefly, here are the several scalar multiplications we implemented and their pseudocodes:**
+
+1. **Iterative algorithm: lsb to msb**
 
    ![image-20220910174352311](task3_report.assets/image-20220910174352311.png)
 
@@ -130,7 +163,7 @@ Briefly, here are the several scalar multiplications we implemented and their ps
 
 ![image-20220910174600154](task3_report.assets/image-20220910174600154.png)
 
-The instructions on the wiki are relatively brief, and further instructions (specific implementation) as follows[12]:
+**The instructions on the wiki are relatively brief, and further instructions (specific implementation) as follows**[12]:
 
  $w:the\ window\ size$ 
 
@@ -142,9 +175,15 @@ We denote k in base $2^w$ as: $k = (k_{n'-1},...,k_2,k_1,k_0)_{2^w}$
 
 The algorithm works as follows：
 
+
+
 $kP = \sum_{i=0}^{n'-1}k_i(2^{wi}P)=\sum_{j=1}^{2^w-1}(j\sum_{i:k_i=j}2^{wi}P)$
 
+
+
 Let:
+
+
 
 $Q_j=\sum_{i:k_i=j}2^{wi}P$
 
@@ -162,25 +201,7 @@ During the benchmark, we tested the windowing method with and without precompute
 
 
 
-
-
-### Security 
-
-The security is based the Elliptic Curve Discrete Logarithmic Problem. This is because adding points on two elliptic curves will result in another point on the curve. **Intuitively, Its position is not directly related to the first two points. When n is large, the final point Q seems to appear anywhere.**
-
-When the attacker has Q and P and wants to calculate the private key n, he can basically only try all possible n to complete. This is computationally infeasible.
-
-
-
-**About National secret algorithm**
-
-The national encryption algorithm is a domestic encryption algorithm issued and recognized by the State Cryptography Administration, which is different from the international algorithm. International algorithms generally refer to the most common commercial algorithms released by the US Security Agency today.
-
-Official standards can refer to: [link](http://c.gb688.cn/bzgk/gb/showGb?type=online&hcno=66A89DD6DA64F49C49456B757BA0624F)
-
-
-
-## Performance Testing
+###　Performance Testing
 
 We use JMH as a tool for performance testing programs.
 Implement a performance test of the generation of public key using  point scalar multiplication algorithm in sm2 elliptic curve.
@@ -249,6 +270,104 @@ Test result data for different methods:
 
 
 
+## Implement in JDK
+
+
+
+Since SM2 and secp256r1 are known as Weierstrass curve. They have the same elliptic curve equation. Defined on the same type of prime finite field Fp, it is a prime curve. And p is a 256-bit prime number.
+
+Naturally, we think to learn from the implementation of secp256r1 in jdk to implement sm2. The method is actually very simple. Through the use of the secp256r1 curve in debug mode and the search of the related parameters, method,and code file in the work space, you can gradually become familiar with the key point.
+
+On the basis of understanding the principle of ECC curve above , we know that to create a new curve that can be used for  key pair generation, encryption and decryption and other functions, the most important things include: 1 establishment the elliptic curve  2 the prime field 3 the order of cyclic subgroups. Others, like point operations, key generation (point multiplication algorithm) and other encryption and decryption functions, jdk has implemented for us.
+
+We use the latest repository based on jdk17 for construction: https://github.com/openjdk/jdk17u.
+
+During the process, learning how to build your own JDK is a must: [build jdk guide](https://openjdk.org/groups/build/doc/building.html)
+
+
+
+**Implement**
+
+This commit is located in : [jdk-sup-sm2](xxxxxxxxxx)  xxxxxxxx
+
+Like in the section Implement with BC, we implement two sm2 curves: sm2p256c1 and sm2p256c2
+
+Briefly, in [FieldGen.java](https://github.com/openjdk/jdk17u/tree/master/make/jdk/src/classes/build/tools/intpoly/FieldGen.java), we need to prepare the field parameters for the modulus calculation of the sm2 curve at first .
+
+Each curve has its own finite field calculation parameters and cyclic subgroup calculation parameters, namely the prime field size and the order of the cyclic subgroup that actually works.Imitate jdk secp256r1 to generate:
+
+````java
+//secp256   
+static FieldParams P256 = new FieldParams(
+            "IntegerPolynomialP256", 26, 10, 2, 256,
+            Arrays.asList(
+                    new Term(224, -1),
+                    new Term(192, 1),
+                    new Term(96, 1),
+                    new Term(0, -1)
+            ), 
+            P256CrSequence(), simpleSmallCrSequence(10)
+    );
+ static FieldParams O256 = new FieldParams(
+            "P256OrderField", 26, 10, 1, 256,
+            "FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551",
+            orderFieldCrSequence(10), orderFieldSmallCrSequence(10)
+    );
+````
+
+
+
+Then, add the sm2 elliptic curve parameter in sun/security/util/CurveDB.java. The relevant method is:
+
+````java
+private static void add(KnownOIDs o, int type, String sfield,
+            String a, String b, String x, String y, String n, int h) {....} 
+````
+
+Here involves the parameters a, b and G point coordinates (x, y) of the curve equation. 
+
+Every curve declared in the JDK is created and made available externally. It is also necessary to  add supplement  of the curve we created for others to use. In some search method and some map structure, we need to make corresponding supplements.
+
+For example, method  "public static NamedCurve lookup(String name) {..}"  return a NamedCurve for the specified OID/name or null if unknown. Of course, we alse need to add the name of the curve we want to add in SunEC.java. 
+
+
+
+**Additional work**
+
+In order to verify whether the sm2 curve we created is correct, I thought of using the ECDSA algorithm based on the sm2 curve.
+Of course, this requires further additions to the code in the ECDSA part in the jdk. But fortunately, the method is similar, and I work it out finally. It should be noted that I did not make corresponding additions and modifications under test/jdk/.... .This is not necessary for this task.
+
+
+
+For details, please refer to commit: xxxxxx
+
+
+
+###　Result
+
+We wrote a simple java program to verify that the jdk we built that supports SM2 elliptic curves works correctly:
+
+Check here xxxx
+
+
+
+````shell
+root@VM-0-5-debian:/home/jdk17/jdk17u/build/linux-x86_64-server-release/jdk/bin# ./java UseKeyPair 
+ecc sm2p256c1-public key:Sun EC public key, 256 bits
+  public x coord: 108215692817942810181640585185388365471717524375043327564736460688225691144182
+  public y coord: 114466569395688925905000092749782687391649460749865190674160554055279618581487
+  parameters: sm2p256c1 [NIST SM2C1-256,X9.62 prime256c1] (1.2.156.10197.1.301.1)
+ecc sm2p256c2-public key:Sun EC public key, 256 bits
+  public x coord: 114005523738278428600895603096780935228695818502624297900508758823478099683210
+  public y coord: 58896388605639362952778070192345433558006911392475144762944321675349456306262
+  parameters: sm2p256c1 [NIST SM2C1-256,X9.62 prime256c1] (1.2.156.10197.1.301.1)
+Message to sign and verify:Tencent rhino bird
+ecdsa(sm2c1)-algo-signature verify message result:true
+ecdsa(sm2c2)-algo-signature verify message result:true
+````
+
+
+
 # Reference
 
 1 [Elliptic Curve Cryptography: a gentle introduction](https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/)](https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/#elliptic-curves)
@@ -277,7 +396,10 @@ Test result data for different methods:
 
 
 
+# Acknowledge
 
+I would like to thank the organizers of the Tencent Rhino-Bird Competition for organizing this event and for giving the opportunity to participate in this event. This is my first open source project experience and I did learn a lot.
+Special thanks to the two mentors for their guidance during this event. I have learned a lot from their valuable advice. Especially a lot of details, their attitude and tolerance has benefited me a lot. Special thanks to @johnsjiang for giving me a lot of guidance and help. Even answering my questions and offering help during some personal time. Thank you very much!
 
 
 
