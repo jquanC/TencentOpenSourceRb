@@ -359,9 +359,7 @@ For details, please refer to [commit](https://github.com/openjdk/jdk17u/compare/
 
 ### Result
 
-We wrote a simple java program to verify that the jdk we built that supports SM2 elliptic curves works correctly:
-
-Check here xxxx
+We wrote a simple [java program](https://github.com/jquanC/TencentOpenSourceRb/blob/main/task3/SM2KeyPairBC/UseKeyPair.java) to verify that the jdk we built that supports SM2 elliptic curves works correctly:
 
 And the result:
 
