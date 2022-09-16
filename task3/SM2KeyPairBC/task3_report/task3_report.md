@@ -157,11 +157,13 @@ SM2 KeyPair() generated successfully
 
 3. ### Montgomery ladder
 
-![image-20220910174509947](task3_report.assets/image-20220910174509947.png)
+​                       ​![image-20220910174509947](task3_report.assets/image-20220910174509947.png)   
 
 4. **Window method**
 
-![image-20220910174600154](task3_report.assets/image-20220910174600154.png)
+   ​                ![image-20220910174600154](task3_report.assets/image-20220910174600154.png)
+
+
 
 **The instructions on the wiki are relatively brief, and further instructions (specific implementation) as follows**[12]:
 
@@ -201,7 +203,9 @@ During the benchmark, we tested the windowing method with and without precompute
 
 
 
-###　Performance Testing
+
+
+### **Performance Testing**
 
 We use JMH as a tool for performance testing programs.
 Implement a performance test of the generation of public key using  point scalar multiplication algorithm in sm2 elliptic curve.
@@ -260,6 +264,8 @@ Test result data for different methods:
 
 
 
+
+
 ### Conclusion
 
 - From the test data, the mongMult takes the longest time. This is because it does point_add and point_double when processing each bit of *n*. Doing this makes it take longer, but the benefit is that the Montgomery ladder is resistant to power attacks or timing attacks in Sideway Attack.
@@ -267,6 +273,8 @@ Test result data for different methods:
 
 - The time overhead of the 4bit_wnw_Mult is smaller than the bc_Mult. The possible reason is that BC has done a lot of security checks in the implementation.
 - Different curves and different private keys will bring about differences in execution speed. But this difference shows consistency across different testing algorithms.
+
+
 
 
 
@@ -288,7 +296,7 @@ During the process, learning how to build your own JDK is a must: [build jdk gui
 
 **Implement**
 
-This commit is located in : [jdk-sup-sm2](xxxxxxxxxx)  xxxxxxxx
+This commit is located in : [jdk-sup-sm2](https://github.com/openjdk/jdk17u/compare/master...jquanC:jdk17u:dev-jdksupsm2)
 
 Like in the section Implement with BC, we implement two sm2 curves: sm2p256c1 and sm2p256c2
 
@@ -315,7 +323,13 @@ static FieldParams P256 = new FieldParams(
     );
 ````
 
+The ' "IntegerPolynomialP256" 'here use the way to improve the ECC implementation
 
+- [Improved ECC Implementation](https://bugs.openjdk.org/browse/JDK-8204574)
+
+- >The finite field arithmetic in the implementation depends on the fact that the field is defined by a prime that has some structure (e.g. 2^256 - 2^224 + 2^192 + 2^96 - 1). 
+
+  
 
 Then, add the sm2 elliptic curve parameter in sun/security/util/CurveDB.java. The relevant method is:
 
@@ -339,17 +353,17 @@ Of course, this requires further additions to the code in the ECDSA part in the 
 
 
 
-For details, please refer to commit: xxxxxx
+For details, please refer to [commit](https://github.com/openjdk/jdk17u/compare/master...jquanC:jdk17u:dev-jdksupsm2)
 
 
 
-###　Result
+### Result
 
 We wrote a simple java program to verify that the jdk we built that supports SM2 elliptic curves works correctly:
 
 Check here xxxx
 
-
+And the result:
 
 ````shell
 root@VM-0-5-debian:/home/jdk17/jdk17u/build/linux-x86_64-server-release/jdk/bin# ./java UseKeyPair 
