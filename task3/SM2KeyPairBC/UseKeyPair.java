@@ -6,7 +6,7 @@ public class UseKeyPair {
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, SignatureException {
 //        ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256r1");
         ECGenParameterSpec ecGenParameterSpec1 = new ECGenParameterSpec("sm2p256c1");
-        ECGenParameterSpec ecGenParameterSpec2 = new ECGenParameterSpec("sm2p256c1");
+        ECGenParameterSpec ecGenParameterSpec2 = new ECGenParameterSpec("secp256r1");
 
         KeyPairGenerator keyPairGenerator1 = KeyPairGenerator.getInstance("EC");
         KeyPairGenerator keyPairGenerator2 = KeyPairGenerator.getInstance("EC");
@@ -24,7 +24,7 @@ public class UseKeyPair {
         KeyPair keyPair2 = keyPairGenerator2.generateKeyPair();
         PublicKey pk2 = keyPair2.getPublic();
         PrivateKey sk2 = keyPair2.getPrivate();
-        System.out.println("ecc sm2p256c2-public key:"+pk2);
+        System.out.println("ecc secp256r1-public key:"+pk2);
         Signature ecdsaSign2 = Signature.getInstance("SHA256withECDSA");
         ecdsaSign2.initSign(sk2);
 
@@ -39,7 +39,7 @@ public class UseKeyPair {
         ecdsaVerify1.initVerify(pk1);
         ecdsaVerify1.update(message.getBytes(StandardCharsets.UTF_8));
         boolean result1 = ecdsaVerify1.verify(signature1);
-        System.out.println("ecdsa(sm2c1)-algo-signature verify message result:"+result1);
+        System.out.println("ecdsa(sm2p256c1)-algo-signature verify message result:"+result1);
 
 
         ecdsaSign2.update(message.getBytes(StandardCharsets.UTF_8));
@@ -48,7 +48,7 @@ public class UseKeyPair {
         ecdsaVerify2.initVerify(pk2);
         ecdsaVerify2.update(message.getBytes(StandardCharsets.UTF_8));
         boolean result2 = ecdsaVerify2.verify(signature2);
-        System.out.println("ecdsa(sm2c2)-algo-signature verify message result:"+result2);
+        System.out.println("ecdsa(secp256r1)-algo-signature verify message result:"+result2);
 
     }
 }

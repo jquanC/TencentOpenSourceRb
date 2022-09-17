@@ -80,7 +80,7 @@ Elliptic curves on finite fields also have a useful conclusion. Any point P on i
 
 For example[7]:
 
-$y^2 = x^3+2x+3 (mod 97)$,　$Point:P=(3,6)$.
+$y^2 = x^3+2x+3 (mod 97),\ Point:P=(3,6)$.
 
 we have: $P=P,2P=2P,3P=3P,4P=4P,5P=0,...,kP=(k\ mod\ 5)P$
 
@@ -145,27 +145,76 @@ SM2 KeyPair() generated successfully
 
 1. **Iterative algorithm: lsb to msb**
 
-   ![image-20220910174352311](task3_report.assets/image-20220910174352311.png)
-
-  
+   
+   
+   ````text
+    let bits = bit_representation(s) # the vector of bits (from LSB to MSB) representing s
+      let res = O # point at infinity
+      let temp = P # track doubled P val
+      for bit in bits: 
+          if bit == 1:            
+              res = res + temp # point add
+          temp = temp + temp # double
+      return res
+   ````
+   
+     
 
 2. **Recursive algorithm**
 
-   ![image-20220910174337099](task3_report.assets/image-20220910174337099.png)
+   
+
+   ````text
+    f(P, d) is
+        if d = 0 then
+            return 0                         # computation complete
+        else if d = 1 then
+            return P
+        else if d mod 2 = 1 then
+            return point_add(P, f(P, d - 1)) # addition when d is odd
+        else
+            return f(point_double(P), d/2)   # doubling when d is even
+   ````
+
+   
 
    
 
 3. ### Montgomery ladder
 
-​                       ​![image-20220910174509947](task3_report.assets/image-20220910174509947.png)   
+   
+
+   ````text
+     R0 ← 0
+     R1 ← P
+     for i from m downto 0 do
+         if di = 0 then
+             R1 ← point_add(R0, R1)
+             R0 ← point_double(R0)
+         else
+             R0 ← point_add(R0, R1)
+             R1 ← point_double(R1)
+     return R0
+   ````
+
+   
 
 4. **Window method**
 
-   ​                ![image-20220910174600154](task3_report.assets/image-20220910174600154.png)
+   
+   
+   ````text
+     Q ← 0
+     for i from m to 0 do
+         Q ← point_double_repeat(Q, w)
+         if di > 0 then
+             Q ← point_add(Q, diP) # using pre-computed value of diP
+     return Q
+   ````
+   
+   
 
-
-
-**The instructions on the wiki are relatively brief, and further instructions (specific implementation) as follows**[12]:
+**The instructions of window method on the wiki are relatively brief, and further instructions (specific implementation) as follows**[12]:
 
  $w:the\ window\ size$ 
 
@@ -298,7 +347,7 @@ During the process, learning how to build your own JDK is a must: [build jdk gui
 
 This commit is located in : [jdk-sup-sm2](https://github.com/openjdk/jdk17u/compare/master...jquanC:jdk17u:dev-jdksupsm2)
 
-Like in the section Implement with BC, we implement two sm2 curves: sm2p256c1 and sm2p256c2
+Like in the section Implement with BC, we implement the sm2 curve: sm2p256c1. 
 
 Briefly, in [FieldGen.java](https://github.com/openjdk/jdk17u/tree/master/make/jdk/src/classes/build/tools/intpoly/FieldGen.java), we need to prepare the field parameters for the modulus calculation of the sm2 curve at first .
 
@@ -336,6 +385,18 @@ Then, add the sm2 elliptic curve parameter in sun/security/util/CurveDB.java. Th
 ````java
 private static void add(KnownOIDs o, int type, String sfield,
             String a, String b, String x, String y, String n, int h) {....} 
+
+
+//adding the sm2 curve
+add(KnownOIDs.sm2p256c1, PD,
+            "FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000FFFFFFFFFFFFFFFF",
+            "FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000FFFFFFFFFFFFFFFC",
+            "28E9FA9E9D9F5E344D5A9E4BCF6509A7F39789F515AB8F92DDBCBD414D940E93",
+            "32C4AE2C1F1981195F9904466A39C9948FE30BBFF2660BE1715A4589334C74C7",
+            "BC3736A2F4F6779C59BDCEE36B692153D0A9877CC62A474002DF32E52139F0A0",
+            "FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFF7203DF6B21C6052B53BBF40939D54123",
+            1);
+
 ````
 
 Here involves the parameters a, b and G point coordinates (x, y) of the curve equation. 
@@ -349,7 +410,7 @@ For example, method  "public static NamedCurve lookup(String name) {..}"  return
 **Additional work**
 
 In order to verify whether the sm2 curve we created is correct, I thought of using the ECDSA algorithm based on the sm2 curve.
-Of course, this requires further additions to the code in the ECDSA part in the jdk. But fortunately, the method is similar, and I work it out finally. It should be noted that I did not make corresponding additions and modifications under test/jdk/.... .This is not necessary for this task.
+Of course, this requires further additions to the code in the ECDSA part in the jdk. But fortunately, the method is similar, and I work it out finally. It should be noted that I did not make all corresponding additions and modifications under test/jdk/.... .This is not necessary for this task.
 
 
 
@@ -366,16 +427,16 @@ And the result:
 ````shell
 root@VM-0-5-debian:/home/jdk17/jdk17u/build/linux-x86_64-server-release/jdk/bin# ./java UseKeyPair 
 ecc sm2p256c1-public key:Sun EC public key, 256 bits
-  public x coord: 108215692817942810181640585185388365471717524375043327564736460688225691144182
-  public y coord: 114466569395688925905000092749782687391649460749865190674160554055279618581487
+  public x coord: 75079310705486444634924992257630817166469993677938306479030705676645196892622
+  public y coord: 81423034089839044194904426403487426477832258303711137367181599836059170740336
   parameters: sm2p256c1 [NIST SM2C1-256,X9.62 prime256c1] (1.2.156.10197.1.301.1)
-ecc sm2p256c2-public key:Sun EC public key, 256 bits
-  public x coord: 114005523738278428600895603096780935228695818502624297900508758823478099683210
-  public y coord: 58896388605639362952778070192345433558006911392475144762944321675349456306262
-  parameters: sm2p256c1 [NIST SM2C1-256,X9.62 prime256c1] (1.2.156.10197.1.301.1)
+ecc secp256r1-public key:Sun EC public key, 256 bits
+  public x coord: 92941931917591505793663316756542590181474887211934231840926574497745469376623
+  public y coord: 23831640433057559179324278934309506533563425501427798000275019505086733444303
+  parameters: secp256r1 [NIST P-256,X9.62 prime256v1] (1.2.840.10045.3.1.7)
 Message to sign and verify:Tencent rhino bird
-ecdsa(sm2c1)-algo-signature verify message result:true
-ecdsa(sm2c2)-algo-signature verify message result:true
+ecdsa(sm2p256c1)-algo-signature verify message result:true
+ecdsa(secp256r1)-algo-signature verify message result:true
 ````
 
 
